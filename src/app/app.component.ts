@@ -21,17 +21,31 @@ export class AppComponent implements OnInit{
   private taskService: TaskService = inject(TaskService);
 
   ngOnInit(): void {
-    this.tasks = this.taskService.getTasks();
+    this.fetchTasks();
+  }
+  
+  fetchTasks(){
+    this.taskService.getTasks()
+    .subscribe({
+      next: tasks => this.tasks = tasks,
+      error: error => console.log(error)
+    })
   }
 
   deleteTask(id: string){
-    this.taskService.deleteTask(id);
-    this.tasks = this.tasks.filter(task => task.id !== id);
+    this.taskService.deleteTask(id)
+    .subscribe({
+      next: task => this.fetchTasks(),
+      error: error => console.log(error)
+    })
   }
 
   addTask(){
     if (this.newTask.name) {
-      this.tasks.push(this.taskService.addTask(this.newTask))
+      this.taskService.addTask(this.newTask)
+      .subscribe({
+        next: task => this.tasks.push(task)
+      })
     }
   }
 

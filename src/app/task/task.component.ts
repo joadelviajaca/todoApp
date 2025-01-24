@@ -17,7 +17,12 @@ export class TaskComponent {
   private taskService: TaskService = inject(TaskService);
 
   completeTask(){
-    this.taskService.changeTaskStatus(this.task.id);
+    this.taskService.changeTaskStatus(this.task.id, this.task.complete)
+    .subscribe({
+      next: task => this.task = task,
+      error: error => console.log(error)
+    }
+    )
     // this.task.complete = !this.task.complete;
   }
 
