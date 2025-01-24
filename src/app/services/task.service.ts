@@ -16,15 +16,19 @@ export class TaskService {
     return this.httpClient.get<Task[]>(this.url);
   }
 
-  addTask(task: Omit<Task, 'id'>) {
+  getTask(id: string): Observable<Task>{
+    return this.httpClient.get<Task>(`${this.url}/${id}`)
+  }
+
+  addTask(task: Omit<Task, 'id'>): Observable<Task>{
     return this.httpClient.post<Task>(this.url, task);
   }
 
-  deleteTask(id: string){
-    return this.httpClient.delete(`${this.url}/${id}`)
+  deleteTask(id: string): Observable<Task>{
+    return this.httpClient.delete<Task>(`${this.url}/${id}`)
   }
 
-  changeTaskStatus(id: string, complete: boolean){
+  changeTaskStatus(id: string, complete: boolean): Observable<Task>{
     return this.httpClient.patch<Task>(`${this.url}/${id}`, {complete: !complete} )
   }
 

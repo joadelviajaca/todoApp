@@ -1,0 +1,23 @@
+<div>
+    <!-- <h2>{{id? 'Edit': 'Add'}} Task</h2> -->
+     <h2>Add</h2>
+    <form (ngSubmit)="addTask()">
+        <div class="mb-3">
+            <label for="taskName" class="form-label">Task Name</label>
+            <input type="text" id="taskName" class="form-control" [(ngModel)]="newTask.name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="taskDescription" class="form-label">Description</label>
+            <textarea id="taskDescription" class="form-control" [(ngModel)]="newTask.description" name="description"
+                required></textarea>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" id="taskComplete" class="form-check-input" [(ngModel)]="newTask.complete"
+                name="complete">
+            <label for="taskComplete" class="form-check-label">Completed</label>
+        </div>
+        <!-- <button type="submit" class="btn btn-success">{{id? 'Edit': 'Add'}} Task</button> -->
+        <button type="submit" class="btn btn-success">Add Task</button>
+
+    </form>
+</div>

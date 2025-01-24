@@ -1,10 +1,11 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Task } from '../interfaces/task';
 import { TaskService } from '../services/task.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-task',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './task.component.html'
 })
 export class TaskComponent {

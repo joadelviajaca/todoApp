@@ -1,0 +1,15 @@
+@if(task){
+
+    <div>
+        <h2>Task Details</h2>
+        <div>
+            <h4>{{ task.name }}</h4>
+            <p>{{ task.description }}</p>
+            <p><strong>Completed:</strong> {{ task.complete ? 'Yes' : 'No' }}</p>
+            <button class="btn btn-secondary" routerLink="/tasks">Back to List</button>
+        </div>
+    </div>
+}
+@else {
+    <p>Loading...</p>
+}

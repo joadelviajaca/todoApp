@@ -1,10 +1,1 @@
-<div class="list-group">
-  <!-- <button class="btn btn-primary" (click)="addTask()">Add task</button> -->
-  @for (task of tasks ; track task.id) {
-      <app-task [task]="task" (onDeleteTask)="deleteTask($event)"></app-task>
-  }
-
-  <input class="form-control mt-2" type="text" name="name" id="name" [(ngModel)]="newTask.name">
-  <button class="btn btn-primary mt-2" (click)="addTask()">Add task</button>
-  <p> {{newTask.name}}</p>
-</div>
+<router-outlet></router-outlet>
