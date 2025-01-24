@@ -1,0 +1,21 @@
+<div class="list-group-item">
+
+    <h5>
+        @if (task.complete) {
+            <del>
+                {{ task.name }} 
+            </del>
+            ✅
+        }
+        @else {
+
+            {{ task.name }} 
+        }
+        
+
+    </h5> 
+    <div>
+        <button class="btn btn-success btn-sm ms-2" (click)="completeTask()" >{{task.complete? 'Mark as Incomplete': 'Mark as Complete'}}</button>
+        <button class="btn btn-danger btn-sm ms-2" (click)="deleteTask()">Delete</button>
+    </div>
+</div>
