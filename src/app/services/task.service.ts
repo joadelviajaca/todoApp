@@ -35,6 +35,7 @@ export class TaskService {
   deleteTask(id: string): void {
     this.httpClient.delete<Task>(`${this.url}/${id}`)
     .subscribe({
+      // next: task => this.taskSubject$.next(this.taskSubject$.getValue().filter(task=> task.id != id)) ,
       next: task => this.getTasks(),
       error: error => console.log(error)
     })
