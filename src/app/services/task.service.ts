@@ -1,35 +1,47 @@
 import { Injectable } from '@angular/core';
 import { Task } from '../interfaces/task';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
 
-  private url : string = "http://localhost:3000/tasks";
+  private url: string = "http://localhost:3000/tasks";
   constructor(private httpClient: HttpClient) { }
 
+  private taskSubject$ = new BehaviorSubject<Task[]>([]);
 
-  getTasks(): Observable<Task[]> {
-    return this.httpClient.get<Task[]>(this.url);
+  get tasks(){
+    return  this.taskSubject$.asObservable();
   }
 
-  getTask(id: string): Observable<Task>{
+  getTasks(): void {
+    this.httpClient.get<Task[]>(this.url)
+    .subscribe({
+      next: tasks => this.taskSubject$.next(tasks)
+    })
+  }
+
+  getTask(id: string): Observable<Task> {
     return this.httpClient.get<Task>(`${this.url}/${id}`)
   }
 
-  addTask(task: Omit<Task, 'id'>): Observable<Task>{
+  addTask(task: Omit<Task, 'id'>): Observable<Task> {
     return this.httpClient.post<Task>(this.url, task);
   }
 
-  deleteTask(id: string): Observable<Task>{
-    return this.httpClient.delete<Task>(`${this.url}/${id}`)
+  deleteTask(id: string): void {
+    this.httpClient.delete<Task>(`${this.url}/${id}`)
+    .subscribe({
+      next: task => this.getTasks(),
+      error: error => console.log(error)
+    })
   }
 
-  changeTaskStatus(id: string, complete: boolean): Observable<Task>{
-    return this.httpClient.patch<Task>(`${this.url}/${id}`, {complete: !complete} )
+  changeTaskStatus(id: string, complete: boolean): Observable<Task> {
+    return this.httpClient.patch<Task>(`${this.url}/${id}`, { complete: !complete })
   }
 
 }

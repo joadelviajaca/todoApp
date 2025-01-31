@@ -1,7 +1,7 @@
 <div class="list-group">
     <!-- <button class="btn btn-primary" (click)="addTask()">Add task</button> -->
-    @for (task of tasks ; track task.id) {
-        <app-task [task]="task" (onDeleteTask)="deleteTask($event)"></app-task>
+    @for (task of taskService.tasks|async ; track task.id) {
+        <app-task [task]="task"></app-task>
     }
   
     <input class="form-control mt-2" type="text" name="name" id="name" [(ngModel)]="newTask.name">

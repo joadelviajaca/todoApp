@@ -3,10 +3,11 @@ import { Task } from '../interfaces/task';
 import { TaskService } from '../services/task.service';
 import { TaskComponent } from '../task/task.component';
 import { FormsModule } from '@angular/forms';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskComponent, FormsModule],
+  imports: [TaskComponent, FormsModule, AsyncPipe],
   templateUrl: './task-list.component.html'
 })
 export class TaskListComponent implements OnInit{
@@ -16,7 +17,7 @@ export class TaskListComponent implements OnInit{
     description: '',
     complete: false
   }
-  private taskService: TaskService = inject(TaskService);
+  taskService: TaskService = inject(TaskService);
 
   ngOnInit(): void {
     this.fetchTasks();
@@ -24,19 +25,15 @@ export class TaskListComponent implements OnInit{
   
   fetchTasks(){
     this.taskService.getTasks()
-    .subscribe({
-      next: tasks => this.tasks = tasks,
-      error: error => console.log(error)
-    })
   }
 
-  deleteTask(id: string){
-    this.taskService.deleteTask(id)
-    .subscribe({
-      next: task => this.fetchTasks(),
-      error: error => console.log(error)
-    })
-  }
+  // deleteTask(id: string){
+  //   this.taskService.deleteTask(id)
+  //   .subscribe({
+  //     next: task => this.fetchTasks(),
+  //     error: error => console.log(error)
+  //   })
+  // }
 
   addTask(){
     if (this.newTask.name) {

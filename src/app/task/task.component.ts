@@ -28,6 +28,6 @@ export class TaskComponent {
   }
 
   deleteTask(){
-    this.onDeleteTask.emit(this.task.id);
+    this.taskService.deleteTask(this.task.id)
   }
 }
