@@ -18,9 +18,16 @@ export class TaskListComponent implements OnInit{
     complete: false
   }
   taskService: TaskService = inject(TaskService);
-
+  message: string = '';
   ngOnInit(): void {
     this.fetchTasks();
+    this.taskService.message
+    .subscribe({
+      next: message => {
+        this.message = message;
+        setTimeout(()=> this.message =  '', 5000)
+      }
+    })
   }
   
   fetchTasks(){

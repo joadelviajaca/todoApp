@@ -12,6 +12,11 @@ export class TaskService {
   constructor(private httpClient: HttpClient) { }
 
   private taskSubject$ = new BehaviorSubject<Task[]>([]);
+  private messageSubject$ = new BehaviorSubject<string>('');
+
+  get message(){
+    return this.messageSubject$.asObservable();
+  }
 
   get tasks(){
     return  this.taskSubject$.asObservable();
@@ -36,7 +41,10 @@ export class TaskService {
     this.httpClient.delete<Task>(`${this.url}/${id}`)
     .subscribe({
       // next: task => this.taskSubject$.next(this.taskSubject$.getValue().filter(task=> task.id != id)) ,
-      next: task => this.getTasks(),
+      next: task => {
+        this.getTasks();
+        this.messageSubject$.next('Tarea eliminada con éxito');
+      },
       error: error => console.log(error)
     })
   }
