@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, Signal } from '@angular/core';
 import { Task } from '../interfaces/task';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, filter } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,23 +9,29 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class TaskService {
 
   private url: string = "http://localhost:3000/tasks";
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+    
+   }
 
-  private taskSubject$ = new BehaviorSubject<Task[]>([]);
-  private messageSubject$ = new BehaviorSubject<string>('');
-
-  get message(){
-    return this.messageSubject$.asObservable();
-  }
+  
+  private tasksSignal = signal<Task[]>([]);
+  private messageSignal = signal<string>('');
 
   get tasks(){
-    return  this.taskSubject$.asObservable();
+    return this.tasksSignal.asReadonly();
   }
+
+  get message(){
+    return this.messageSignal;
+  }
+
+
+  
 
   getTasks(): void {
     this.httpClient.get<Task[]>(this.url)
     .subscribe({
-      next: tasks => this.taskSubject$.next(tasks)
+      next: tasks => this.tasksSignal.set(tasks)
     })
   }
 
@@ -40,11 +46,15 @@ export class TaskService {
   deleteTask(id: string): void {
     this.httpClient.delete<Task>(`${this.url}/${id}`)
     .subscribe({
-      // next: task => this.taskSubject$.next(this.taskSubject$.getValue().filter(task=> task.id != id)) ,
+      // next: task => {
+      //   this.getTasks();
+      //   // this.messageSubject$.next('Tarea eliminada con éxito');
       next: task => {
-        this.getTasks();
-        this.messageSubject$.next('Tarea eliminada con éxito');
-      },
+        this.tasksSignal.set(this.tasks().filter(task => task.id !== id));
+        this.messageSignal.set('Tarea eliminada con éxito');
+        setTimeout(()=> this.messageSignal.set(''),3000)
+      }
+      ,
       error: error => console.log(error)
     })
   }

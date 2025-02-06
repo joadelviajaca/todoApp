@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit, Signal, WritableSignal } from '@angular/core';
 import { Task } from '../interfaces/task';
 import { TaskService } from '../services/task.service';
 import { TaskComponent } from '../task/task.component';
@@ -11,42 +11,36 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './task-list.component.html'
 })
 export class TaskListComponent implements OnInit{
-  tasks: Task[] = [];
+  tasks: Signal<Task[]>;
+  message: WritableSignal<string>;
+
+  constructor(){
+    this.tasks = this.taskService.tasks;
+    this.message = this.taskService.message;
+  }
+
   newTask: Omit<Task, 'id'> = {
     name: '',
     description: '',
     complete: false
   }
   taskService: TaskService = inject(TaskService);
-  message: string = '';
+  
   ngOnInit(): void {
     this.fetchTasks();
-    this.taskService.message
-    .subscribe({
-      next: message => {
-        this.message = message;
-        setTimeout(()=> this.message =  '', 5000)
-      }
-    })
   }
+
+  
   
   fetchTasks(){
     this.taskService.getTasks()
   }
 
-  // deleteTask(id: string){
-  //   this.taskService.deleteTask(id)
-  //   .subscribe({
-  //     next: task => this.fetchTasks(),
-  //     error: error => console.log(error)
-  //   })
-  // }
-
   addTask(){
     if (this.newTask.name) {
       this.taskService.addTask(this.newTask)
       .subscribe({
-        next: task => this.tasks.push(task)
+        next: task => this.tasks().push(task)
       })
     }
   }

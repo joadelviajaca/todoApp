@@ -1,13 +1,13 @@
-@if(message){
+@if(message()){
 
     <div class="alert alert-success">
-        {{message}}
+        {{message()}}
     </div>
 }
 
 <div class="list-group">
     <!-- <button class="btn btn-primary" (click)="addTask()">Add task</button> -->
-    @for (task of taskService.tasks|async ; track task.id) {
+    @for (task of tasks() ; track task.id) {
         <app-task [task]="task"></app-task>
     }
   
